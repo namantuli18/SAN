@@ -147,6 +147,7 @@ class Trainer():
 
                     save_list = [sr]
                     if not no_eval:
+                        print(calculate_ssim(sr,hr))
                         eval_acc += utility.calc_psnr(
                             sr, hr, scale, self.args.rgb_range,
                             benchmark=self.loader_test.dataset.benchmark
