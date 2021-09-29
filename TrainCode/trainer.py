@@ -38,7 +38,12 @@ def calculate_ssim(img1, img2):
     '''
     img1=img1.cpu().detach().numpy()
     img2=img2.cpu().detach().numpy()
-    print(img1.shape)
+    h=img1.shape[3]
+    w=img1.shape[2]
+    c=img1.shape[1]
+#     print(img1.shape)
+    img1=img1.reshape((w,h,c))
+    img2=img2.reshape((w,h,c))
     if not img1.shape == img2.shape:
         raise ValueError('Input images must have the same dimensions.')
     if img1.ndim == 2:
