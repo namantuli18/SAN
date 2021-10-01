@@ -9,8 +9,9 @@ from torch.autograd import Variable
 class VGG(nn.Module):
     def __init__(self, conv_index, rgb_range=1):
         super(VGG, self).__init__()
-        vgg = models.vgg19(pretrained=True).features
-        modules = [m for m in vgg]
+        vgg = models.vgg19(pretrained=True)
+        vgg_features = models.vgg19(pretrained=True).features
+        modules = [m for m in vgg_features]
         if conv_index == '22':
             self.vgg = nn.Sequential(*modules[:8])
         elif conv_index == '54':
