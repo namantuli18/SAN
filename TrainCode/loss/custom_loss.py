@@ -52,4 +52,4 @@ class custom_loss(nn.Module):
         #return ssim_map.mean() 
         X=torch.from_numpy(X)
         Y=torch.from_numpy(Y)
-        return np.mean(batch_loss)
+        return torch.from_numpy(batch_loss)
