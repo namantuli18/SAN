@@ -3,6 +3,7 @@ from scipy import ndimage
 import cv2
 import torch
 import torch.nn as nn
+import pickle
 
 class custom_loss(nn.Module):
     """Custom loss"""
@@ -12,6 +13,10 @@ class custom_loss(nn.Module):
         self.C2 = (0.03 * 255)**2
 
     def forward(self, X, Y):
+        with open('X.pkl','wb') as f:
+            pickle.dump(X,f)
+        with open('Y.pkl','wb') as f:
+            pickle.dump(Y,f)
         X=X.cpu()
         Y=Y.cpu()
         X=X.detach().numpy()
