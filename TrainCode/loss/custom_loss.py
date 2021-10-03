@@ -18,6 +18,9 @@ class custom_loss(nn.Module):
         Y=Y.detach().numpy()
         X=np.float64(X)
         Y=np.float64(Y)
+        print(X)
+        print('\n')
+        print(Y)
         kernel = cv2.getGaussianKernel(3, 1.5)
         window = np.outer(kernel, kernel.transpose())
 
