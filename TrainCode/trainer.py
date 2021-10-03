@@ -107,7 +107,7 @@ class Trainer():
             print(loss.item())
 
             if loss.item() < self.args.skip_threshold * self.error_last:
-#                 loss.backward()
+                loss.backward()
                 self.optimizer.step()
             else:
                 print('Skip this batch {}! (Loss: {})'.format(
