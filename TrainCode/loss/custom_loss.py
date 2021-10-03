@@ -12,6 +12,8 @@ class custom_loss(nn.Module):
         self.C2 = (0.03 * 255)**2
 
     def forward(self, X, Y):
+        X=X.numpy()
+        Y=Y.numpy()
         kernel = cv2.getGaussianKernel(3, 1.5)
         window = np.outer(kernel, kernel.transpose())
 
