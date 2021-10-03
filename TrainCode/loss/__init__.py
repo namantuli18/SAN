@@ -31,6 +31,9 @@ class Loss(nn.modules.loss._Loss):
             elif loss_type == 'gradient':
                 module = import_module('loss.gradient_loss')
                 loss_function = getattr(module, 'gradient_loss')()
+            elif loss_type == 'custom_loss':
+                module = import_module('loss.custom_loss')
+                loss_function = getattr(module, 'custom_loss')()
             elif loss_type.find('VGG') >= 0:
                 module = import_module('loss.vgg')
                 loss_function = getattr(module, 'VGG')(
