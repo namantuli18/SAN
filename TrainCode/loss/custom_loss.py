@@ -19,12 +19,6 @@ class custom_loss(nn.Module):
         Y=Y.detach().numpy()
         X=np.float64(X)
         Y=np.float64(Y)
-        X=X.cpu()
-        Y=Y.cpu()
-        X=X.detach().numpy()
-        Y=Y.detach().numpy()
-        X=np.float64(X)
-        Y=np.float64(Y)
 
         batch_loss=[]
         for cnt,i in enumerate(X):
