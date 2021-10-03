@@ -1,6 +1,8 @@
 import numpy as np
 from scipy import ndimage
 import cv2
+import torch
+import torch.nn as nn
 
 class custom_loss(nn.Module):
     """Custom loss"""
