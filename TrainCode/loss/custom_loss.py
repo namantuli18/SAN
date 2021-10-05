@@ -48,10 +48,10 @@ class custom_loss(nn.Module):
 
 
             loss = (sigma1_sq+sigma2_sq-2*sigma12)
-            batch_loss.append(np.sum(loss))
+            batch_loss.append(np.mean(loss))
         #return ssim_map.mean() 
         X=torch.from_numpy(X)
         Y=torch.from_numpy(Y)
-        returner = torch.from_numpy(np.array(batch_loss)).mean()
+        returner = torch.from_numpy(np.array(batch_loss)).sum()
         returner.requires_grad=True
         return returner
