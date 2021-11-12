@@ -14,7 +14,7 @@ class custom_loss(nn.Module):
         self.C1 = (0.01 * 255)**2
         self.C2 = (0.03 * 255)**2
         self.eps = 1e-3
-    def my_filter2D(image, kernel):
+    def my_filter2D(self,image, kernel):
         kx, ky = kernel.shape
         x_n = kx//2
         y_n = kx//2
