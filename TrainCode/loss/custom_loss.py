@@ -11,6 +11,7 @@ class custom_loss(nn.Module):
         super(custom_loss, self).__init__()
         self.C1 = (0.01 * 255)**2
         self.C2 = (0.03 * 255)**2
+        self.eps = 1e-3
     def forward(self, X, Y):
         diff = torch.add(X, -Y)
         error = torch.sqrt( diff * diff + self.eps )
