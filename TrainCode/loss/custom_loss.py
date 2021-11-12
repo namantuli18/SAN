@@ -12,11 +12,39 @@ class custom_loss(nn.Module):
         self.C1 = (0.01 * 255)**2
         self.C2 = (0.03 * 255)**2
         self.eps = 1e-3
-    def forward(self, X, Y):
-        diff = torch.add(X, -Y)
-        error = torch.sqrt( diff * diff + self.eps )
-        loss = torch.sum(error)
-        return loss
+        
+        
+    def forward(X, Y):
+        i=0
+        batch_loss=torch.tensor([],device='cuda:0')
+        for _ in X:
+
+            kernel=torch.tensor([[0.09474166, 0.11831801, 0.09474166],
+           [0.11831801, 0.14776132, 0.11831801],
+           [0.09474166, 0.11831801, 0.09474166]],device='cuda:0')
+            window=torch.tensor([[0.09474166, 0.11831801, 0.09474166],
+           [0.11831801, 0.14776132, 0.11831801],
+           [0.09474166, 0.11831801, 0.09474166]],device='cuda:0')
+            mu1=my_filter2D(X[i],window)[0][5:-5, 5:-5]
+            mu2=my_filter2D(Y[i],window)[0][5:-5, 5:-5]
+            mu1_sq=torch.multiply(mu1,mu1)
+            mu2_sq=torch.multiply(mu2,mu2)
+            mu1_mu2=torch.multiply(mu1,mu2)
+            sigma1_sq=my_filter2D(torch.multiply(X[i],X[i]),window)[0][5:-5,5:-5]-mu1_sq
+            sigma2_sq=my_filter2D(torch.multiply(Y[i],Y[i]),window)[0][5:-5,5:-5]-mu2_sq
+            sigma12=my_filter2D(torch.multiply(X[i],Y[i]),window)[0][5:-5,5:-5]-mu1_mu2
+            # sigma1_sq=my_filter2D(torch.multiply(X[i],X[i]),window)[5:-5, 5:-5] - mu1_sq
+            # sigma2_sq=my_filter2D(torch.multiply(Y[i],Y[i]),window)[5:-5, 5:-5] - mu2_sq
+            # sigma12=my_filter2D(torch.multiply(X[i],Y[i]),window)[5:-5, 5:-5] - mu1_mu2
+            loss=torch.subtract(torch.multiply(sigma1_sq,sigma2_sq),2*sigma12)
+            batch_loss=torch.add(loss.mean(),batch_loss)
+            i+=1
+        return batch_loss.sum()
+#     def forward(self, X, Y):
+#         diff = torch.add(X, -Y)
+#         error = torch.sqrt( diff * diff + self.eps )
+#         loss = torch.sum(error)
+#         return loss
 #     def forward(self, X, Y):
 #         X=X.cpu()
 #         Y=Y.cpu()
