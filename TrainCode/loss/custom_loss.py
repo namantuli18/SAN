@@ -15,8 +15,8 @@ class custom_loss(nn.Module):
     def forward(self, X, Y):
         X=X.cpu()
         Y=Y.cpu()
-        X=X/255
-        y=Y/255
+#         X=X/255
+#         y=Y/255
         X=X.detach().numpy()
         Y=Y.detach().numpy()
         X=np.float64(X)
@@ -24,15 +24,17 @@ class custom_loss(nn.Module):
 
         batch_loss=[]
         for cnt,i in enumerate(X):
+            
             # print(img1[cnt].shape,img2[cnt].shape)
             h=X[cnt].shape[2]
             w=X[cnt].shape[1]
             c=X[cnt].shape[0]
 
-
+            
             x=X[cnt].reshape((w,h,c))
             y=Y[cnt].reshape((w,h,c))
-
+            x=x/255
+            y=y/255
 
             kernel = cv2.getGaussianKernel(3, 1.5)
             window = np.outer(kernel, kernel.transpose())
