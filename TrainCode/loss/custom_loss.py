@@ -19,7 +19,7 @@ class custom_loss(nn.Module):
         x_n = kx//2
         y_n = kx//2
         padded_image = torch.nn.functional.pad(image, (0, 0, ky//2, ky//2, kx//2, kx//2))
-        filtimg = torch.Tensor(image)
+        filtimg = torch.Tensor(image,device='cuda:0')
         px, py, nc = padded_image.shape
         for x in range(px):
             for y in range(py):
