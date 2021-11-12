@@ -9,8 +9,8 @@ from torch.autograd import Variable
 from tqdm import tqdm
 
 def ssim(img1, img2):
-    C1 = (0.01 * 255)**2
-    C2 = (0.03 * 255)**2
+    C1 = (0.01 * 1)**2
+    C2 = (0.03 * 1)**2
 
     # img1 = img1.astype(np.float64)
     # img2 = img2.astype(np.float64)
