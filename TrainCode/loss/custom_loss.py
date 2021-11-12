@@ -14,7 +14,7 @@ class custom_loss(nn.Module):
         self.eps = 1e-3
         
         
-    def forward(X, Y):
+    def forward(self,X, Y):
         i=0
         batch_loss=torch.tensor([],device='cuda:0')
         for _ in X:
