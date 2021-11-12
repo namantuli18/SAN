@@ -31,6 +31,8 @@ class custom_loss(nn.Module):
             
             x=X[cnt].reshape((w,h,c))
             y=Y[cnt].reshape((w,h,c))
+            x=x/255
+            y=y/255
             kernel = cv2.getGaussianKernel(3, 1.5)
             window = np.outer(kernel, kernel.transpose())
 
