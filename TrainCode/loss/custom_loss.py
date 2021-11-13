@@ -15,32 +15,9 @@ class custom_loss(nn.Module):
         self.C2 = (0.03 * 255)**2
         self.eps = 1e-3
     def my_filter2D(self,image, kernel):
-        kx, ky = kernel.shape
-        x_n = kx//2
-        y_n = kx//2
-        padded_image = torch.nn.functional.pad(image, (0, 0, ky//2, ky//2, kx//2, kx//2))
-        filtimg = torch.tensor(image,device='cuda:0')
-        px, py, nc = padded_image.shape
-        for x in range(px):
-            for y in range(py):
-                for c in range(nc):
-                    if x - x_n < 0:
-                        continue
-                    if x + x_n >= px:
-                        continue
-                    if y - y_n < 0:
-                        continue
-                    if y + y_n >= py:
-                        continue
-                    total = 0.0
-                    image_n = padded_image[x-x_n:x+x_n+1, y-y_n:y+y_n+1,c]
-                    for x_i in range(kx):
-                        for y_i in range(ky):
-                            total += image_n[x_i,y_i]*kernel[x_i,y_i]
-                    filtx = x-x_n
-                    filty = y-y_n
-                    filtimg[filtx,filty,c] = total
-        return filtimg
+        image=image.cpu().detach().numpy()
+        kernel=kernel.cpu().detach().numpy()
+        return torch.tensor(cv2.filter2D(image, -1, kernel),device='cuda:0')
         
     def forward(self,X, Y):
         i=0
