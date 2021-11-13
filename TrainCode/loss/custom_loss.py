@@ -58,9 +58,9 @@ class custom_loss(nn.Module):
             mu1_sq=torch.mul(mu1,mu1)
             mu2_sq=torch.mul(mu2,mu2)
             mu1_mu2=torch.mul(mu1,mu2)
-            sigma1_sq=my_filter2D(torch.mul(X[i],X[i]),window)[0][5:-5,5:-5]-mu1_sq
-            sigma2_sq=my_filter2D(torch.mul(Y[i],Y[i]),window)[0][5:-5,5:-5]-mu2_sq
-            sigma12=my_filter2D(torch.mul(X[i],Y[i]),window)[0][5:-5,5:-5]-mu1_mu2
+            sigma1_sq=self.my_filter2D(torch.mul(X[i],X[i]),window)[0][5:-5,5:-5]-mu1_sq
+            sigma2_sq=self.my_filter2D(torch.mul(Y[i],Y[i]),window)[0][5:-5,5:-5]-mu2_sq
+            sigma12=self.my_filter2D(torch.mul(X[i],Y[i]),window)[0][5:-5,5:-5]-mu1_mu2
             # sigma1_sq=my_filter2D(torch.multiply(X[i],X[i]),window)[5:-5, 5:-5] - mu1_sq
             # sigma2_sq=my_filter2D(torch.multiply(Y[i],Y[i]),window)[5:-5, 5:-5] - mu2_sq
             # sigma12=my_filter2D(torch.multiply(X[i],Y[i]),window)[5:-5, 5:-5] - mu1_mu2
