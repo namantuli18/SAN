@@ -21,7 +21,7 @@ class custom_loss(nn.Module):
         
     def forward(self,X, Y):
         i=0
-        batch_loss=torch.tensor([],device='cuda:0', requires_grad=True)
+        batch_loss=torch.tensor(0,device='cuda:0', requires_grad=True)
         for _ in X:
 
             kernel=torch.tensor([[0.09474166, 0.11831801, 0.09474166],
