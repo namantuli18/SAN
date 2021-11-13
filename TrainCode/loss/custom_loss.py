@@ -30,6 +30,8 @@ class custom_loss(nn.Module):
             window=torch.tensor([[0.09474166, 0.11831801, 0.09474166],
            [0.11831801, 0.14776132, 0.11831801],
            [0.09474166, 0.11831801, 0.09474166]],device='cuda:0')
+            X=X/255
+            Y=Y/255
             mu1=self.my_filter2D(X[i],window)[0][5:-5, 5:-5]
             mu2=self.my_filter2D(Y[i],window)[0][5:-5, 5:-5]
             mu1_sq=torch.mul(mu1,mu1)
