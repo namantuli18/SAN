@@ -55,16 +55,16 @@ class custom_loss(nn.Module):
            [0.09474166, 0.11831801, 0.09474166]],device='cuda:0')
             mu1=self.my_filter2D(X[i],window)[0][5:-5, 5:-5]
             mu2=self.my_filter2D(Y[i],window)[0][5:-5, 5:-5]
-            mu1_sq=torch.multiply(mu1,mu1)
-            mu2_sq=torch.multiply(mu2,mu2)
-            mu1_mu2=torch.multiply(mu1,mu2)
-            sigma1_sq=self.my_filter2D(torch.multiply(X[i],X[i]),window)[0][5:-5,5:-5]-mu1_sq
-            sigma2_sq=self.my_filter2D(torch.multiply(Y[i],Y[i]),window)[0][5:-5,5:-5]-mu2_sq
-            sigma12=self.my_filter2D(torch.multiply(X[i],Y[i]),window)[0][5:-5,5:-5]-mu1_mu2
+            mu1_sq=torch.mul(mu1,mu1)
+            mu2_sq=torch.mul(mu2,mu2)
+            mu1_mu2=torch.mul(mu1,mu2)
+            sigma1_sq=my_filter2D(torch.mul(X[i],X[i]),window)[0][5:-5,5:-5]-mu1_sq
+            sigma2_sq=my_filter2D(torch.mul(Y[i],Y[i]),window)[0][5:-5,5:-5]-mu2_sq
+            sigma12=my_filter2D(torch.mul(X[i],Y[i]),window)[0][5:-5,5:-5]-mu1_mu2
             # sigma1_sq=my_filter2D(torch.multiply(X[i],X[i]),window)[5:-5, 5:-5] - mu1_sq
             # sigma2_sq=my_filter2D(torch.multiply(Y[i],Y[i]),window)[5:-5, 5:-5] - mu2_sq
             # sigma12=my_filter2D(torch.multiply(X[i],Y[i]),window)[5:-5, 5:-5] - mu1_mu2
-            loss=torch.subtract(torch.multiply(sigma1_sq,sigma2_sq),2*sigma12)
+            loss=torch.sub(torch.mul(sigma1_sq,sigma2_sq),2*sigma12)
             batch_loss=torch.add(loss.mean(),batch_loss)
             i+=1
         return batch_loss.sum()
