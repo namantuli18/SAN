@@ -18,35 +18,50 @@ class custom_loss(nn.Module):
         image=image.cpu().detach().numpy()
         kernel=kernel.cpu().detach().numpy()
         return torch.tensor(cv2.filter2D(image, -1, kernel),device='cuda:0', requires_grad=True)
-        
-    def forward(self,X, Y):
-        i=0
-        batch_loss=torch.tensor(0.0,device='cuda:0', requires_grad=True)
-        for _ in X:
+    
+    def utils(self,X,window):
+        dest=torch.empty(X.shape,device='cuda:0')
+        anchor=torch.tensor([-1,-1],device='cuda:0')
+        w,h,c=X.shape
+        for i in range(w):
+            for j in range(h):
+                s=0
+                for ki in range(window.shape[0]):
+                    for kj in range(window.shape[1]):
+                        try:
+                            s+=window[ki][kj]*X[i+ki+1][j+kj+1]
+                        except:
+                            pass
 
-            kernel=torch.tensor([[0.09474166, 0.11831801, 0.09474166],
-           [0.11831801, 0.14776132, 0.11831801],
-           [0.09474166, 0.11831801, 0.09474166]],device='cuda:0')
-            window=torch.tensor([[0.09474166, 0.11831801, 0.09474166],
-           [0.11831801, 0.14776132, 0.11831801],
-           [0.09474166, 0.11831801, 0.09474166]],device='cuda:0')
-            X=X/255
-            Y=Y/255
-            mu1=self.my_filter2D(X[i],window)[0][5:-5, 5:-5]
-            mu2=self.my_filter2D(Y[i],window)[0][5:-5, 5:-5]
+                dest[i][j]=s
+        return dest
+    
+    
+    def forward(self,X, Y):
+        X=X/255
+        Y=Y/255
+        batch_loss=torch.tensor(0.0,device='cuda:0', requires_grad=True)
+        for cnt,i in enumerate(X):
+            c,h,w=X[cnt].shape
+            x=X[cnt].reshape((w,h,c))
+            y=Y[cnt].reshape((w,h,c))
+            kernel=torch.tensor(([[0.30780133],
+                [0.38439734],
+                [0.30780133]]),device='cuda:0')
+            window=torch.tensor(([[0.30780133],
+                [0.38439734],
+                [0.30780133]]),device='cuda:0')
+            mu1=self.utils(x,window)[5:-5, 5:-5]
+            mu2=self.utils(y,window)[5:-5, 5:-5]
             mu1_sq=torch.mul(mu1,mu1)
             mu2_sq=torch.mul(mu2,mu2)
             mu1_mu2=torch.mul(mu1,mu2)
-            sigma1_sq=self.my_filter2D(torch.mul(X[i],X[i]),window)[0][5:-5,5:-5]-mu1_sq
-            sigma2_sq=self.my_filter2D(torch.mul(Y[i],Y[i]),window)[0][5:-5,5:-5]-mu2_sq
-            sigma12=self.my_filter2D(torch.mul(X[i],Y[i]),window)[0][5:-5,5:-5]-mu1_mu2
-            # sigma1_sq=my_filter2D(torch.multiply(X[i],X[i]),window)[5:-5, 5:-5] - mu1_sq
-            # sigma2_sq=my_filter2D(torch.multiply(Y[i],Y[i]),window)[5:-5, 5:-5] - mu2_sq
-            # sigma12=my_filter2D(torch.multiply(X[i],Y[i]),window)[5:-5, 5:-5] - mu1_mu2
+            sigma1_sq=self.utils(torch.mul(x,x),window)[5:-5,5:-5]-mu1_sq
+            sigma2_sq=self.utils(torch.mul(y,y),window)[5:-5,5:-5]-mu2_sq
+            sigma12=self.utils(torch.mul(x,y),window)[5:-5,5:-5]-mu1_mu2
             loss=torch.sub(torch.mul(sigma1_sq,sigma2_sq),2*sigma12)
             batch_loss=torch.add(loss.mean(),batch_loss)
-            i+=1
-        return batch_loss.sum()
+        return batch_loss
 #     def forward(self, X, Y):
 #         diff = torch.add(X, -Y)
 #         error = torch.sqrt( diff * diff + self.eps )
