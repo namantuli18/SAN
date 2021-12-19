@@ -45,14 +45,16 @@ class custom_loss(nn.Module):
             c,h,w=X[cnt].shape
             x=X[cnt].reshape((w,h,c))
             y=Y[cnt].reshape((w,h,c))
+            x=x.cpu().detach().numpy()
+            y=y.cpu().detach().numpy()
             kernel=torch.tensor(([[0.30780133],
                 [0.38439734],
                 [0.30780133]]),device='cuda:0')
             window=torch.tensor(([[0.30780133],
                 [0.38439734],
                 [0.30780133]]),device='cuda:0')
-            mu1=self.utils(x,window)[5:-5, 5:-5]
-            mu2=self.utils(y,window)[5:-5, 5:-5]
+            mu1=cv2.filter2D(x,window)[5:-5, 5:-5]
+            mu2=cv2.filter2D(y,window)[5:-5, 5:-5]
             mu1_sq=torch.mul(mu1,mu1)
             mu2_sq=torch.mul(mu2,mu2)
             mu1_mu2=torch.mul(mu1,mu2)
