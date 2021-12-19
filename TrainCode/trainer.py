@@ -41,7 +41,6 @@ def calculate_ssim(img1, img2):
     h=img1.shape[3]
     w=img1.shape[2]
     c=img1.shape[1]
-#     print(img1.shape)
     img1=img1.reshape((w,h,c))
     img2=img2.reshape((w,h,c))
     if not img1.shape == img2.shape:
@@ -104,7 +103,7 @@ class Trainer():
             self.optimizer.zero_grad()
             sr = self.model(lr, idx_scale)
             loss = self.loss(sr, hr)
-            print("Batch : {} Loss: {}".format(batch,loss.item()))
+#             print("Batch : {} Loss: {}".format(batch,loss.item()))
 
             if loss.item() < self.args.skip_threshold * self.error_last:
                 loss.backward()
@@ -128,7 +127,7 @@ class Trainer():
 
         self.loss.end_log(len(self.loader_train))
         self.error_last = self.loss.log[-1, -1]
-
+        print(self.loss)
     def test(self):
         epoch = self.scheduler.last_epoch + 1
         self.ckp.write_log('\nEvaluation:')
