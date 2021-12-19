@@ -54,7 +54,7 @@ class custom_loss(nn.Module):
                 [0.38439734],
                 [0.30780133]]),device='cuda:0')
             window=window.cpu().detach().numpy()
-            y=y.cpu().detach().numpy()
+            kernel=kernel.cpu().detach().numpy()
             mu1=cv2.filter2D(x,window)[5:-5, 5:-5]
             mu2=cv2.filter2D(y,window)[5:-5, 5:-5]
             mu1_sq=torch.mul(mu1,mu1)
