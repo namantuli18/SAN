@@ -127,7 +127,8 @@ class Trainer():
 
         self.loss.end_log(len(self.loader_train))
         self.error_last = self.loss.log[-1, -1]
-        print(self.loss)
+#         print(self.loss)
+        print(loss.item())
     def test(self):
         epoch = self.scheduler.last_epoch + 1
         self.ckp.write_log('\nEvaluation:')
