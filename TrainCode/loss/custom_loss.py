@@ -16,7 +16,7 @@ class custom_loss(nn.Module):
         self.eps = 1e-3
     def my_filter2D(self,image, kernel):
         image=image.cpu().detach().numpy()
-        kernel=kernel.cpu().detach().numpy()
+#         kernel=kernel.cpu().detach().numpy()
         return torch.tensor(cv2.filter2D(image, kernel),device='cuda:0', requires_grad=True)
     
     def utils(self,X,window):
