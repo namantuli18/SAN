@@ -17,7 +17,7 @@ class custom_loss(nn.Module):
     def my_filter2D(self,image, kernel):
         image=image.cpu().detach().numpy()
         kernel=kernel.cpu().detach().numpy()
-        return torch.tensor(cv2.filter2D(image, -1, kernel),device='cuda:0', requires_grad=True)
+        return torch.tensor(cv2.filter2D(image, kernel),device='cuda:0', requires_grad=True)
     
     def utils(self,X,window):
         dest=torch.empty(X.shape,device='cuda:0')
@@ -45,8 +45,8 @@ class custom_loss(nn.Module):
             c,h,w=X[cnt].shape
             x=X[cnt].reshape((w,h,c))
             y=Y[cnt].reshape((w,h,c))
-            window=window.cpu().detach().numpy()
-            kernel=kernel.cpu().detach().numpy()
+            kernel = cv2.getGaussianKernel(3, 1.5)
+            window = np.outer(kernel, kernel.transpose())
 
             mu1=self.my_filter2D(x,window)[5:-5, 5:-5]
             mu2=self.my_filter2D(y,window)[5:-5, 5:-5]
