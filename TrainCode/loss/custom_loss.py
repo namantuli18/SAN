@@ -63,6 +63,7 @@ class custom_loss(nn.Module):
             sigma12=cv2.filter2D(torch.mul(x,y),window)[5:-5,5:-5]-mu1_mu2
             loss=torch.sub(torch.mul(sigma1_sq,sigma2_sq),2*sigma12)
             batch_loss=torch.add(loss.mean(),batch_loss)
+            print("Batch : {} :: Loss : {}".format(cnt,batch_loss))
         return batch_loss
 #     def forward(self, X, Y):
 #         diff = torch.add(X, -Y)
