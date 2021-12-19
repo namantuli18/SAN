@@ -45,18 +45,17 @@ class custom_loss(nn.Module):
             c,h,w=X[cnt].shape
             x=X[cnt].reshape((w,h,c))
             y=Y[cnt].reshape((w,h,c))
-            x=x.cpu().detach().numpy()
-            y=y.cpu().detach().numpy()
-            kernel = cv2.getGaussianKernel(3, 1.5)
-            window = np.outer(kernel, kernel.transpose())
-            mu1=cv2.filter2D(x,window)[5:-5, 5:-5]
-            mu2=cv2.filter2D(y,window)[5:-5, 5:-5]
+            window=window.cpu().detach().numpy()
+            kernel=kernel.cpu().detach().numpy()
+
+            mu1=self.my_filter2D(x,window)[5:-5, 5:-5]
+            mu2=self.my_filter2D(y,window)[5:-5, 5:-5]
             mu1_sq=torch.mul(mu1,mu1)
             mu2_sq=torch.mul(mu2,mu2)
             mu1_mu2=torch.mul(mu1,mu2)
-            sigma1_sq=cv2.filter2D(torch.mul(x,x),window)[5:-5,5:-5]-mu1_sq
-            sigma2_sq=cv2.filter2D(torch.mul(y,y),window)[5:-5,5:-5]-mu2_sq
-            sigma12=cv2.filter2D(torch.mul(x,y),window)[5:-5,5:-5]-mu1_mu2
+            sigma1_sq=self.my_filter2D(torch.mul(x,x),window)[5:-5,5:-5]-mu1_sq
+            sigma2_sq=self.my_filter2D(torch.mul(y,y),window)[5:-5,5:-5]-mu2_sq
+            sigma12=self.my_filter2D(torch.mul(x,y),window)[5:-5,5:-5]-mu1_mu2
             loss=torch.sub(torch.mul(sigma1_sq,sigma2_sq),2*sigma12)
             batch_loss=torch.add(loss.mean(),batch_loss)
             print("Batch : {} :: Loss : {}".format(cnt,batch_loss))
