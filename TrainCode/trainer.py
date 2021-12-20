@@ -103,7 +103,7 @@ class Trainer():
             self.optimizer.zero_grad()
             sr = self.model(lr, idx_scale)
             loss = -self.loss(sr, hr)
-            print(loss.item())
+#             print(loss.item())
 #             print("Batch : {} Loss: {}".format(batch,loss.item()))
 
             if loss.item() < self.args.skip_threshold * self.error_last:
