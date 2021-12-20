@@ -149,10 +149,10 @@ class MSSSIM(torch.nn.Module):
 
 
 
-class L1_Charbonnier(nn.Module):
+class custom_loss(nn.Module):
     """L1 Charbonnierloss."""
     def __init__(self):
-        super(L1_Charbonnier, self).__init__()
+        super(custom_loss, self).__init__()
         self.eps = 1e-3
 
     def forward(self, X, Y):
