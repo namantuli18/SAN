@@ -198,7 +198,7 @@ class Trainer():
 
             self.optimizer.zero_grad()
             sr = self.model(lr, idx_scale)
-            loss = -self.loss(sr, hr)
+            loss = self.loss(sr, hr)
 #             print(loss.item())
 #             print("Batch : {} Loss: {}".format(batch,loss.item()))
 
