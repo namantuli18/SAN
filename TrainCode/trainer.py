@@ -103,6 +103,7 @@ class Trainer():
             self.optimizer.zero_grad()
             sr = self.model(lr, idx_scale)
             loss = self.loss(sr, hr)
+            print(loss.item())
 #             print("Batch : {} Loss: {}".format(batch,loss.item()))
 
             if loss.item() < self.args.skip_threshold * self.error_last:
@@ -128,7 +129,7 @@ class Trainer():
         self.loss.end_log(len(self.loader_train))
         self.error_last = self.loss.log[-1, -1]
 #         print(self.loss)
-        print(loss.item())
+#         print(loss.item())
     def test(self):
         epoch = self.scheduler.last_epoch + 1
         self.ckp.write_log('\nEvaluation:')
