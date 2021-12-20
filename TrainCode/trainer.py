@@ -227,6 +227,7 @@ class Trainer():
 #         print(self.loss)
 #         print(loss.item())
     def test(self):
+        m=MSSSIM()
         epoch = self.scheduler.last_epoch + 1
         self.ckp.write_log('\nEvaluation:')
         self.ckp.add_log(torch.zeros(1, len(self.scale)))
