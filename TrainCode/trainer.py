@@ -199,6 +199,8 @@ class Trainer():
             self.optimizer.zero_grad()
             sr = self.model(lr, idx_scale)
             loss = - self.loss(sr, hr)
+            with open("logs.csv","a") as f:
+                f.write(f"{epoch},{loss}\n")
 #             print(loss.item())
 #             print("Batch : {} Loss: {}".format(batch,loss.item()))
 
@@ -226,6 +228,7 @@ class Trainer():
         self.error_last = self.loss.log[-1, -1]
 #         print(self.loss)
 #         print(loss.item())
+        
     def test(self):
         m=MSSSIM()
         epoch = self.scheduler.last_epoch + 1
