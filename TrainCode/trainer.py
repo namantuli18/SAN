@@ -199,7 +199,7 @@ class Trainer():
             self.optimizer.zero_grad()
             sr = self.model(lr, idx_scale)
             loss = - self.loss(sr, hr)
-            with open("logs.csv","a") as f:
+            with open("logs_loss.csv","a") as f:
                 f.write(f"{epoch},{loss}\n")
 #             print(loss.item())
 #             print("Batch : {} Loss: {}".format(batch,loss.item()))
@@ -283,6 +283,10 @@ class Trainer():
         )
         if not self.args.test_only:
             self.ckp.save(self, epoch, is_best=(best[1][0] + 1 == epoch))
+        with open("logs_ssim.csv","a") as f:
+                f.write(f"{epoch},{np.sum(ssim_list)/len(self.loader_test)}\n")
+        with open("logs_psnr.csv","a") as f:
+                f.write(f"{epoch},{self.ckp.log[-1, idx_scale]}\n")
 
     def prepare(self, l, volatile=False):
         device = torch.device('cpu' if self.args.cpu else 'cuda')
